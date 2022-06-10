@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-gateway-central
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  source:
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    chart: gateway
+    targetRevision: 1.14.0
+    helm:
+      version: v3
+      values: |
+        name: "istio-ingress-central"
+        replicaCount: 3
+        service:
+          annotations:
+            service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+            service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '60'
+            service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+            service.beta.kubernetes.io/aws-load-balancer-type: nlb
+        autoscaling:
+          enabled: true
+          minReplicas: 3
+          maxReplicas: 6
+          targetCPUUtilizationPercentage: 80
+        global:
+          hub: gcr.io/istio-release
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+    automated:
+      selfHeal: true

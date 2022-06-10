@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quest-pre-reqs-00
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:defi-magi/quest-eks-cluster-state.git
+    path: apps/quest-pre-reqs-00
+    targetRevision: HEAD
+    helm:
+      version: v3
+      values: 
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: quest-node-apps
+  syncPolicy:
+    automated:
+      prune: true
+    automated:
+      selfHeal: true

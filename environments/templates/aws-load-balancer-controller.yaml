@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+  source:
+    repoURL: https://aws.github.io/eks-charts
+    chart: aws-load-balancer-controller
+    targetRevision: 1.4.2
+    helm:
+      version: v3
+      values: |
+        clusterName: "eks-security-cluster-00" #ARGO TF Output VALUE #TODO Automate
+        serviceAccount:
+          create: true
+          name: "aws-load-balancer-controller"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+    automated:
+      selfHeal: true

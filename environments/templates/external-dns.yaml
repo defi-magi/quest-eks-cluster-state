@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: external-dns
+    targetRevision: 6.5.1
+    helm:
+      version: v3
+      values: |
+        sources:
+          - istio-virtualservice
+          - ingress
+        aws:
+          region: "us-east-1"
+        domainFilters: ["quest.defimagi.com"]  #ARGO TF Output VALUE #TODO Automate
+        serviceAccount:
+          create: false
+          name: "external-dns-irsa"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-dns
+  syncPolicy:
+    automated:
+      prune: true
+    automated:
+      selfHeal: false
