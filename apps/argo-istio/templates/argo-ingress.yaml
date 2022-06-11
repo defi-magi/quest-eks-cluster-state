@@ -46,51 +46,5 @@ spec:
     # This is optional since cert-manager will default to this value however
     # if you are using an external issuer, change this to that issuer group.
     group: cert-manager.io
----
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: argo-gateway-https
-  namespace: argocd
-spec:
-  selector:
-    istio: ingress-central
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*" #rename for your DNS entry
-    tls:
-      httpsRedirect: true
-  - port:
-      number: 443
-      name: https
-      protocol: HTTPS
-    hosts:
-    - "*"
-    tls:
-      mode: SIMPLE # SIMPLE terminates, PASSTHROUGH... Passes through ^_^
-      credentialName: argocd-ingress-certificiate # fetches certs from Kubernetes secret
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: argo-http
-  namespace: argocd
-spec:
-  hosts:
-  - argo.quest.defimagi.com
-  gateways:
-  - argo-gateway-https
-  http:
-  - match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        port:
-          number: 80
-        host: argo-cd-argocd-server
+
  
