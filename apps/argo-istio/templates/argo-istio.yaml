@@ -57,12 +57,6 @@ spec:
     istio: ingress-central
   servers:
   - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - argo.quest.defimagi.com #rename for your DNS entry
-  - port:
       number: 443
       name: https
       protocol: HTTPS
