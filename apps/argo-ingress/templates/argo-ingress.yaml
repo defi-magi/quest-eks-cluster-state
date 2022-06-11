@@ -18,7 +18,7 @@ spec:
       - jetstack
   # The use of the common name field has been deprecated since 2000 and is
   # discouraged from being used.
-  commonName: "*.quest.defimagi.com"
+  commonName: argo.quest.defimagi.com
   privateKey:
     algorithm: RSA
     encoding: PKCS1
@@ -28,7 +28,7 @@ spec:
     - client auth
   # At least one of a DNS Name, URI, or IP address is required.
   dnsNames:
-    - "*.quest.defimagi.com"
+    - argo.quest.defimagi.com
   # Issuer references are always required.
   issuerRef:
     name: letsencrypt-prod-cluster-issuer
