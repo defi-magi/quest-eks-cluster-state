@@ -15,7 +15,6 @@ spec:
       version: v3
       values: |
         sources:
-          - istio-virtualservice
           - ingress
         aws:
           region: "us-east-1"
