@@ -14,7 +14,7 @@ spec:
     helm:
       version: v3
       values: |
-        clusterName: "eks-security-cluster-00" #ARGO TF Output VALUE #TODO Automate
+        clusterName: "eks-quest-cluster-dev-00" #ARGO TF Output VALUE #TODO Automate
         serviceAccount:
           create: true
           name: "aws-load-balancer-controller"
