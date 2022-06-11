@@ -62,6 +62,8 @@ spec:
       protocol: HTTP
     hosts:
     - "*" #rename for your DNS entry
+    tls:
+      httpsRedirect: true
   - port:
       number: 443
       name: https
