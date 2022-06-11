@@ -31,7 +31,7 @@ spec:
           minAvailable: 3
   destination:
     server: https://kubernetes.default.svc
-    namespace: ingress-ingress
+    namespace: ingress-nginx
   syncPolicy:
     automated:
       prune: true
