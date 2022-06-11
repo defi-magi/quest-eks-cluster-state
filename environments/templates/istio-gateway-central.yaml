@@ -31,7 +31,7 @@ spec:
           hub: gcr.io/istio-release
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: istio-system
   syncPolicy:
     automated:
       prune: true
