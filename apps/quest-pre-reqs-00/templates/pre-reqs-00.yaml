@@ -46,6 +46,7 @@ spec:
     # if you are using an external issuer, change this to that issuer group.
     group: cert-manager.io
 ---
+# cluster secret store which allows any namespace in the cluster to extract secrets from secretmanager
 apiVersion: external-secrets.io/v1alpha1
 kind: ClusterSecretStore
 metadata:
@@ -61,3 +62,34 @@ spec:
           serviceAccountRef:
             name: external-secrets-irsa
             namespace: external-secrets
+---
+# github service account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: github-service-account
+  namespace: quest-node-apps
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: github-role
+  namespace: quest-node-apps
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: github-rolebinding
+  namespace: quest-node-apps
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: github-role
+subjects:
+- namespace: quest-node-apps
+  kind: ServiceAccount
+  name: github-service-account
