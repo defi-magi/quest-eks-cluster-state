@@ -5,6 +5,23 @@ metadata:
     kubernetes.io/metadata.name: quest-node-apps
   name: quest-node-apps
 ---
+# cluster secret store which allows any namespace in the cluster to extract secrets from secretmanager
+apiVersion: external-secrets.io/v1alpha1
+kind: ClusterSecretStore
+metadata:
+  name: aws-secrets-manager
+  namespace: external-secrets
+spec:
+  provider:
+    aws:
+      service: SecretsManager
+      region: us-east-1
+      auth:
+        jwt:
+          serviceAccountRef:
+            name: external-secrets-irsa
+            namespace: external-secrets
+---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -45,23 +62,6 @@ spec:
     # This is optional since cert-manager will default to this value however
     # if you are using an external issuer, change this to that issuer group.
     group: cert-manager.io
----
-# cluster secret store which allows any namespace in the cluster to extract secrets from secretmanager
-apiVersion: external-secrets.io/v1alpha1
-kind: ClusterSecretStore
-metadata:
-  name: aws-secrets-manager
-  namespace: external-secrets
-spec:
-  provider:
-    aws:
-      service: SecretsManager
-      region: us-east-1
-      auth:
-        jwt:
-          serviceAccountRef:
-            name: external-secrets-irsa
-            namespace: external-secrets
 ---
 # github service account
 apiVersion: v1
